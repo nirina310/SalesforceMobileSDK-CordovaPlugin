@@ -112,6 +112,9 @@ open class SalesforceDroidGapActivity : CordovaActivity(), SalesforceActivityInt
     /** Manager for cookies in web view */
     private val salesforceCookieManager: SalesforceWebViewCookieManager = SalesforceWebViewCookieManager()
 
+    /** App Base URL */
+    private var baseUrl: String = "file:///android_asset/www"
+
     /**
      * Called when the activity is first created.
      */
@@ -119,6 +122,8 @@ open class SalesforceDroidGapActivity : CordovaActivity(), SalesforceActivityInt
         super.onCreate(savedInstanceState)
 
         init()
+
+        baseUrl = "${preferences.getString("scheme", "http")}://${preferences.getString("hostname", "localhost")}"
 
         // Get the boot configuration
         bootConfig = getBootConfig(this)
@@ -485,7 +490,7 @@ open class SalesforceDroidGapActivity : CordovaActivity(), SalesforceActivityInt
 
         i(TAG, "loadLocalStartPage called - loading! - $startPage")
 
-        loadUrl("file:///android_asset/www/$startPage")
+        loadUrl("$baseUrl/$startPage")
         webAppLoaded = true
     }
 
@@ -582,7 +587,7 @@ open class SalesforceDroidGapActivity : CordovaActivity(), SalesforceActivityInt
     fun loadErrorPage() {
         val errorPage = bootConfig?.errorPage ?: return
         i(TAG, "getErrorPageUrl called - local error page: $errorPage")
-        loadUrl("file:///android_asset/www/$errorPage")
+        loadUrl("$baseUrl/$errorPage")
     }
 
     /** The web view being used */
@@ -648,6 +653,3 @@ open class SalesforceDroidGapActivity : CordovaActivity(), SalesforceActivityInt
     }
 
 }
-
-
-
